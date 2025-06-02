@@ -22,7 +22,7 @@ pip install -r requirements.txt
 Run the script with your desired model and quantization type:
 
 ```sh
-python run_llm.py --model <huggingface-model-name> --quant <quant-type>
+python run_llm.py --model <huggingface-model-name>
 ```
 
 - `<huggingface-model-name>`: e.g. `meta-llama/Llama-2-7b-hf`, `gpt2`, etc.
@@ -31,7 +31,7 @@ python run_llm.py --model <huggingface-model-name> --quant <quant-type>
 **Example:**
 
 ```sh
-python run_llm.py --model meta-llama/Llama-2-7b-hf --quant int8
+python run_llm.py --model meta-llama/Llama-2-7b-hf
 ```
 
 ## Notes
