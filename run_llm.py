@@ -22,7 +22,6 @@ def get_vram_usage():
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--model_id', type=str, required=True, help='Hugging Face model ID')
-    parser.add_argument('--hf_token', type=str, default=None, help='Hugging Face access token (optional)')
     parser.add_argument('--context_size', type=int, required=True, help='Context window size (e.g., 2048, 4096)')
     parser.add_argument('--quant_format', type=str, required=True, choices=['gguf', 'exl2'], help='Quantization format')
     parser.add_argument('--gguf_quant_preset', type=str, help='GGUF quantization preset (required if quant_format=gguf)')
@@ -86,7 +85,7 @@ def main():
     context_size_gb = context_size_bytes / (1024 ** 3)
 
     # Run inference to measure actual VRAM usage
-    prompt = tokenizer.decode(tokenizer(["Hello"])[0][:1])
+    prompt = "Hello"
     vram_before = get_vram_usage()
     _ = pipe(prompt, max_new_tokens=args.context_size)
     vram_after = get_vram_usage()
