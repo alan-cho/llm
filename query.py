@@ -5,12 +5,13 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-const_config_flag = "targon" # "targon" or "openai"
+# "Targon" or "OpenAI"
+const_config_flag = "Targon"
 
 TARGON_CONFIG = {
     "base_url": "https://api.targon.com/v1",
     "api_key": os.getenv("TARGON_API_KEY"),
-    "model": "deepseek-ai/DeepSeek-R1-0528"
+    "model": "deepseek-ai/DeepSeek-V3-0324"
 }
 
 OPENAI_CONFIG = {
@@ -19,7 +20,7 @@ OPENAI_CONFIG = {
     "model": "gpt-4o-mini"
 }
 
-CONFIG = TARGON_CONFIG if const_config_flag == "targon" else OPENAI_CONFIG
+CONFIG = TARGON_CONFIG if const_config_flag == "Targon" else OPENAI_CONFIG
 
 client = OpenAI(
     base_url=CONFIG["base_url"],
@@ -121,14 +122,23 @@ def run_parameter_case():
     try:
         response = client.chat.completions.create(
             model=CONFIG["model"],
-            stream=False,
+            stream=True,
             messages=[
                 {"role": "system", "content": "You are a helpful assistant."},
                 {"role": "user", "content": "Write a short story about robots."}
             ],
-            #Parameters Here
+            # Parameters Here
         )
-        print(f"Response: {response.choices[0].message.content}")
+        
+        full_response = ""
+        for chunk in response:
+            if chunk.choices and len(chunk.choices) > 0:
+                if hasattr(chunk.choices[0], 'delta') and chunk.choices[0].delta.content is not None:
+                    content = chunk.choices[0].delta.content
+                    print(content, end="", flush=True)
+                    full_response += content
+        
+        print("\n") 
     except Exception as e:
         print(f"Error: {e}")
 
