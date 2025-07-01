@@ -1,5 +1,4 @@
 import os
-import sys
 import argparse
 from openai import OpenAI
 from dotenv import load_dotenv
@@ -11,12 +10,14 @@ client = OpenAI(
     api_key=os.getenv("TARGON_API_KEY")
 )
 
-def run_bubble_sort_test():
-    """Test 1: Bubble sort implementation"""
-    print("=== Test 1: Bubble Sort Implementation ===")
+const_model = "deepseek-ai/DeepSeek-R1"
+
+def run_base_case():
+    """Test 1: Base Case"""
+    print("=== Test 1: Base Case ===")
     try:
         response = client.chat.completions.create(
-            model="deepseek-ai/DeepSeek-R1",
+            model=const_model,
             stream=True,
             messages=[
                 {"role": "system", "content": "You are a helpful programming assistant."},
@@ -31,8 +32,8 @@ def run_bubble_sort_test():
     except Exception as e:
         print(f"Error: {e}")
 
-def run_function_calling_test():
-    """Test 2: Function calling"""
+def run_function_calling_case():
+    """Test 2: Function Calling"""
     print("\n=== Test 2: Function Calling ===")
     def get_weather(location, unit="celsius"):
         """Get the current weather for a location"""
@@ -103,35 +104,34 @@ def run_function_calling_test():
 def main():
     parser = argparse.ArgumentParser(description='Test Targon API with different features')
     parser.add_argument('--test', type=int, choices=[1, 2], 
-                       help='Test to run: 1 for bubble sort, 2 for function calling')
+                       help='Test to run: 1 for base case, 2 for function calling')
     parser.add_argument('--all', action='store_true', 
                        help='Run all tests')
     
     args = parser.parse_args()
     
     if args.test == 1:
-        run_bubble_sort_test()
+        run_base_case()
     elif args.test == 2:
-        run_function_calling_test()
+        run_function_calling_case()
     elif args.all:
-        run_bubble_sort_test()
-        run_function_calling_test()
+        run_base_case()
+        run_function_calling_case()
     else:
-        # Interactive mode
         print("Available tests:")
-        print("1. Bubble sort implementation")
-        print("2. Function calling")
+        print("1. Base Case")
+        print("2. Function Calling")
         print("3. Run all tests")
         
         try:
             choice = input("Enter your choice (1, 2, or 3): ").strip()
             if choice == "1":
-                run_bubble_sort_test()
+                run_base_case()
             elif choice == "2":
-                run_function_calling_test()
+                run_function_calling_case()
             elif choice == "3":
-                run_bubble_sort_test()
-                run_function_calling_test()
+                run_base_case()
+                run_function_calling_case()
             else:
                 print("Invalid choice. Please run with --help for usage information.")
         except KeyboardInterrupt:
